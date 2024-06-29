@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// prisma/schema.prisma
+
+// Define your models
+model Doctor {
+  id            Int         @id @default(autoincrement())
+  name          String
+  specialty     String
+  yearsOfExp    Int
+  fees          Int
+  address       String
+  photo         String? // Optional: Store photo URL or path
+  startTime     DateTime? // Optional: Start time for availability
+  endTime       DateTime? // Optional: End time for availability
+  availableDays DayOfWeek[] // Array of available days of the week
+  // Add more fields as needed
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+}
+
+model Prescription {
+  id        Int    @id @default(autoincrement())
+  file_url  String // This will store the URL of the uploaded file
+  file_name String
+  userId    String
+}
+
+
+model Booking {
+  id       Int      @id @default(autoincrement())
+  userId   Int
+  doctorId Int
+  date     DateTime
+  // Add more fields as needed
+}
